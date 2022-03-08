@@ -145,3 +145,5 @@ dist
 *.mdb
 *.pdb
 *.sqlite3
+
+docs

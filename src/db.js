@@ -5,10 +5,4 @@ const db = new sqlite3.Database('./mock.db', sqlite3.OPEN_READWRITE, err => {
   console.log('connected');
 });
 
-db.each('SELECT name as nombre FROM sqlite_schema', (err, nombre) => {
-  console.log(nombre);
-});
-
-db.close(err => {
-  if (err) return console.error(err.message);
-});
+module.exports = db;
