@@ -2,97 +2,91 @@ const { program } = require('commander');
 const { prompt } = require('inquirer');
 let fs = require('fs');
 const db = require('./db');
+const {
+  listarActividades,
+  agregarActividad,
+  gestionarActividades,
+  listarActividadesDiarias,
+  saveLink,
+  completeActividad,
+  updateActividad,
+} = require('./options');
 
 program
   .name('Task Cli')
   .description('Ordenar actvidades pendientes')
-  .version('1.0');
+  .version('1.0')
+  .option('-l, --list', 'listarActividades()')
+  .option('-ld, --listd', 'listarActividadesDiarias()')
+  .option('-lk, --link-type <type>', 'saveLink()')
+  .option('-s, --save', 'agregarActividad()')
+  .option('-u, --update', 'updateActividad()');
 
-program.command('config').action(async () => {
-  fs.readFile('./src/schema.sqlite3', 'utf-8', (err, data) => {
-    if (err) {
-      console.log('error: ', err);
-    } else {
-      data.split(';').forEach(e => db.run(e));
+program.command('act');
 
-      db.close(err => {
-        if (err) return console.error(err.message);
-      });
-    }
+program
+  .command('config')
+  .description('Se configura la base de datos')
+  .action(async () => {
+    fs.readFile('./src/schema.sqlite3', 'utf-8', (err, data) => {
+      if (err) {
+        console.log('error: ', err);
+      } else {
+        data
+          .split(';')
+          .map(e => e.replace(/\n|\r/g, ''))
+          .forEach(e => db.run(e));
+
+        db.close(err => {
+          if (err) return console.error(err.message);
+        });
+      }
+    });
   });
-});
 
-program.command('interface').action(async () => {
-  await prompt([
-    {
+program
+  .command('interface')
+  .description('Se muestra las opciones')
+  .action(async () => {
+    await prompt({
       type: 'list',
       name: 'opcion',
       message: 'Opciones',
       choices: [
-        'Listar diario',
+        'Listar actvividades diarias',
         'Agregar actividad',
-        'Listar Actvidades',
-        'Listar todos los elementos',
+        'Listar todas las actvidades',
+        'Gestionar actividades',
+        'Agregar Link',
+        'Marcar completado',
+        'Salir',
       ],
-    },
-  ])
-    .then(async ans => {
-      if (ans.opcion == 'Agregar actividad') {
-        await prompt([
-          {
-            type: 'input',
-            name: 'nombre',
-            message: 'Nombre de la actividad',
-          },
-          {
-            type: 'input',
-            name: 'desc',
-            message: 'Descripción de la actividad',
-          },
-          {
-            type: 'list',
-            name: 'prioridad',
-            message: 'Prioridad de la actividad',
-            choices: ['Diario', 'Default'],
-            default: 1,
-          },
-        ])
-          .then(response => {
-            const stmt = db.prepare(
-              "INSERT INTO actividad (nombre, descripcion, tipo_prioridad_id, fecha_creacion) VALUES (?,?,?,datetime('now','localtime'))"
-            );
-            stmt.run(
-              response.nombre,
-              response.desc,
-              response.prioridad == 'Default' ? 1 : 0
-            );
-            stmt.finalize();
-          })
-          .catch(error => {
-            console.log('Guardar nueva actividad');
-            console.log(error);
-          });
-      } else if (ans.opcion == 'Listar Actvidades') {
-        db.each('SELECT * FROM actividad', function (err, row) {
-          console.log(row);
-        });
-      } else if (ans.opcion == 'Listar diario') {
-        db.each(
-          'SELECT * FROM actividad where tipo_prioridad_id = 0',
-          function (err, row) {
-            console.log(row);
-          }
-        );
-      } else if (ans.opcion == 'Listar todos los elementos') {
-        db.each('SELECT * FROM elemento', function (err, row) {
-          console.log(row);
-        });
-      }
     })
-    .catch(error => {
-      console.log('Menu principal');
-      console.log(error);
-    });
-});
+      .then(async ans => {
+        if (ans.opcion == 'Agregar actividad') {
+          await agregarActividad();
+        } else if (ans.opcion == 'Listar todas las actvidades') {
+          listarActividades();
+        } else if (ans.opcion == 'Listar actvividades diarias') {
+          listarActividadesDiarias();
+        } else if (ans.opcion == 'Gestionar actividades') {
+          gestionarActividades();
+        } else if (ans.opcion == 'Agregar Link') {
+          saveLink(null, false);
+        } else if (ans.opcion == 'Marcar completado') {
+          completeActividad();
+        }
+      })
+      .catch(error => {
+        console.error('Menu principal');
+        console.error(error);
+      });
+  });
 
 program.parse(process.argv);
+const options = program.opts();
+if (options.list) listarActividades();
+if (options.listd) listarActividadesDiarias();
+if (options.linkType) saveLink(options.linkType, true);
+if (options.save) agregarActividad();
+if (options.update) updateActividad();
