@@ -1,8 +1,8 @@
 const { prompt } = require('inquirer');
 const db = require('./db');
 
-function agregarActividad() {
-  prompt([
+async function agregarActividad() {
+  await prompt([
     {
       type: 'input',
       name: 'nombre',
@@ -58,7 +58,7 @@ function gestionarActividades() {
 }
 
 function saveLink(link, desc) {
-  db.all('SELECT * FROM actividad', (err, rows) => {
+  db.all('SELECT * FROM actividad', async (err, rows) => {
     const options = desc
       ? [
           {
@@ -73,7 +73,7 @@ function saveLink(link, desc) {
           {
             type: 'input',
             name: 'url',
-            message: 'Ingrese url',
+            message: 'Ingrese url del recurso',
           },
           {
             type: 'list',
@@ -88,7 +88,7 @@ function saveLink(link, desc) {
             message: 'Ingrese descripcion',
           },
         ];
-    prompt(options).then(res => {
+    await prompt(options).then(res => {
       const stmt = db.prepare(
         "INSERT INTO link (actividad_id, descripcion, url, fecha_creacion) VALUES (?,?,?,datetime('now','localtime'))"
       );

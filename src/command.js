@@ -16,11 +16,11 @@ program
   .name('Task Cli')
   .description('Ordenar actvidades pendientes')
   .version('1.0')
-  .option('-l, --list', 'listarActividades()')
-  .option('-ld, --listd', 'listarActividadesDiarias()')
-  .option('-lk, --link-type <type>', 'saveLink()')
-  .option('-s, --save', 'agregarActividad()')
-  .option('-u, --update', 'updateActividad()');
+  .option('-l, --list', 'Listar Actividades')
+  .option('-ld, --listd', 'Listar Actividades Diarias')
+  .option('-lk, --link-type <type>', 'Guardar link')
+  .option('-s, --save', 'Agregar Actividad')
+  .option('-u, --update', 'Actualizar estado de actividad diaria');
 
 program.command('act');
 
@@ -62,9 +62,9 @@ program
         'Salir',
       ],
     })
-      .then(async ans => {
+      .then(ans => {
         if (ans.opcion == 'Agregar actividad') {
-          await agregarActividad();
+          agregarActividad();
         } else if (ans.opcion == 'Listar todas las actvidades') {
           listarActividades();
         } else if (ans.opcion == 'Listar actvividades diarias') {
