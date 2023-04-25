@@ -17,6 +17,10 @@
     node src/command.js -h
     ```
 
+## Inicio de la interfaz principal en desarrollo
+```
+node src/command.js interface
+```
 ## Instalación
 
 ```
