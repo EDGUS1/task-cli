@@ -1,18 +1,23 @@
 const db = require('../config/db');
 
-async function listActivities() {
-  db.all('SELECT nombre, descripcion FROM actividad', (err, rows) => {
-    console.table(rows, Object.keys(rows[0]));
+function print_table(query) {
+  db.all(query, (err, rows) => {
+    if (rows && rows.length > 0) console.table(rows, Object.keys(rows[0]));
+    else console.log('No hay datos guardados');
   });
+  db.close();
+}
+
+function listActivities() {
+  const query =
+    'SELECT a.name, a.description, t.name AS priority FROM activity a INNER JOIN type_priority t ON a.type_priority_id = t.type_priority_id';
+  print_table(query);
 }
 
 function listActivitiesByDay() {
-  db.all(
-    'SELECT nombre, descripcion FROM actividad where tipo_prioridad_id = 0',
-    function (err, row) {
-      console.table(row, Object.keys(row[0]));
-    }
-  );
+  const query =
+    "SELECT a.name, a.description, (CASE WHEN ((SELECT b.completed FROM bitacora b WHERE b.activity_id = a.activity_id) IS NULL)THEN 'TODO' ELSE 'COMPLETED' END) AS estado FROM activity a WHERE a.type_priority_id = 2";
+  print_table(query);
 }
 
 module.exports = { listActivities, listActivitiesByDay };
