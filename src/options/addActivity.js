@@ -17,20 +17,21 @@ async function addActivity() {
       type: 'list',
       name: 'prioridad',
       message: 'Prioridad de la actividad',
-      choices: ['Diario', 'Default'],
-      default: 1,
+      choices: ['Default', 'Diario'],
+      default: 0,
     },
   ])
     .then(response => {
       const stmt = db.prepare(
-        "INSERT INTO actividad (nombre, descripcion, tipo_prioridad_id, fecha_creacion) VALUES (?,?,?,datetime('now','localtime'))"
+        'INSERT INTO activity (name, description, type_priority_id) VALUES (?,?,?)'
       );
       stmt.run(
         response.nombre,
         response.desc,
-        response.prioridad == 'Default' ? 1 : 0
+        response.prioridad == 'Default' ? 1 : 2
       );
       stmt.finalize();
+      db.close();
     })
     .catch(error => {
       console.error('Guardar nueva actividad');
