@@ -19,7 +19,7 @@
 
 ## Inicio de la interfaz principal en desarrollo
 ```
-node src/command.js interface
+node src/command.js menu
 ```
 ## Instalación
 
