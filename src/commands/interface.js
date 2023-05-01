@@ -1,12 +1,13 @@
 const { prompt } = require('inquirer');
+
 const { addActivity } = require('../options/addActivity');
 const {
   listActivities,
   listActivitiesByDay,
 } = require('../options/listActivity');
-const { saveLink } = require('../options/saveLink');
 const { completeActivity } = require('../options/completeActivity');
 const { manageActivity } = require('../options/manageActivity');
+const { saveReference } = require('../options/saveReference');
 
 const menu = async () => {
   await prompt({
@@ -18,8 +19,8 @@ const menu = async () => {
       'Agregar actividad',
       'Listar todas las actvidades',
       'Gestionar actividades',
-      'Agregar Link',
-      'Marcar completado',
+      'Agregar referencia(url)',
+      'Marcar activivdad completada',
       'Salir',
     ],
   })
@@ -32,9 +33,9 @@ const menu = async () => {
         listActivitiesByDay();
       } else if (ans.opcion == 'Gestionar actividades') {
         manageActivity();
-      } else if (ans.opcion == 'Agregar Link') {
-        saveLink(null, false);
-      } else if (ans.opcion == 'Marcar completado') {
+      } else if (ans.opcion == 'Agregar referencia(url)') {
+        saveReference(null, false);
+      } else if (ans.opcion == 'Marcar activivdad completada') {
         completeActivity();
       }
     })
