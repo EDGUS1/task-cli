@@ -4,23 +4,59 @@ const {
   listActivities,
   listActivitiesByDay,
 } = require('./options/listActivity');
-const { saveLink } = require('./options/saveLink');
 const { addActivity } = require('./options/addActivity');
-const { updateActivity } = require('./options/updateActivity');
+const { completeActvDaily } = require('./options/updateActivity');
+const {
+  saveReference,
+  saveReferenceActiv,
+} = require('./options/saveReference');
+const {
+  listAllReference,
+  listReferenceByActvity,
+  listReferenceByType,
+} = require('./options/listReference');
+
 const { configdb } = require('./commands/config');
 const { menu } = require('./commands/interface');
 
 program
   .name('Task Cli')
-  .description('Ordenar actvidades pendientes')
-  .version('1.0')
-  .option('-l, --list', 'Listar Actividades')
-  .option('-ld, --listd', 'Listar Actividades Diarias')
-  .option('-lk, --link-type <type>', 'Guardar link')
-  .option('-s, --save', 'Agregar Actividad')
-  .option('-u, --update', 'Actualizar estado de actividad diaria');
+  .description('Gestor de actividades/tareas/referencias')
+  .version('1.1');
 
-program.command('act');
+program
+  .command('task')
+  .description('Opciones basicas para las actividaes/tareas')
+  .option('-la, --list-all', 'Listar todas las actividades')
+  .option('-ld, --list-daily', 'Listar actividades diarias')
+  .option(
+    '-a, --add [url]',
+    'Agregar referencia a una actividad existente [url]'
+  )
+  .option('-s, --save', 'Agregar actividad')
+  .option('-u, --update', 'Marcar como completado la actividad diaria')
+  .action(options => {
+    if (options.listAll) listActivities();
+    else if (options.listDaily) listActivitiesByDay();
+    else if (options.add)
+      saveReferenceActiv(options.add, options.add === true ? false : true);
+    else if (options.save) addActivity();
+    else if (options.update) completeActvDaily();
+  });
+
+program
+  .command('ref')
+  .description('Opciones basicas para las referencias')
+  .option('-a, --add [url]', 'Guardar referencia [url]')
+  .option('-l, --list-ref', 'Listar todas las referencias')
+  .option('-la, --list-ref-act', 'Listar referencias por actividad')
+  .option('-lt, --list-ref-type', 'Listar referencias por tipo')
+  .action(options => {
+    if (options.add) saveReference(options.add);
+    else if (options.listRef) listAllReference();
+    else if (options.listRefAct) listReferenceByActvity();
+    else if (options.listRefType) listReferenceByType(2);
+  });
 
 program
   .command('config')
@@ -28,14 +64,8 @@ program
   .action(configdb);
 
 program
-  .command('interface')
-  .description('Se muestra las opciones')
+  .command('menu')
+  .description('Se muestra toas las opciones disponibles')
   .action(menu);
 
 program.parse(process.argv);
-const options = program.opts();
-if (options.list) listActivities();
-if (options.listd) listActivitiesByDay();
-if (options.linkType) saveLink(options.linkType, true);
-if (options.save) addActivity();
-if (options.update) updateActivity();
