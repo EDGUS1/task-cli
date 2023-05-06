@@ -3,7 +3,7 @@ const db = require('../config/db');
 
 function completeActvDaily() {
   db.all(
-    'SELECT activity_id, name FROM activity where type_priority_id = 2 and activity_id NOT IN (SELECT activity_id from bitacora)',
+    'SELECT activity_id, name FROM activity WHERE active = 1 AND type_priority_id = 2 and activity_id NOT IN (SELECT activity_id FROM bitacora)',
     (err, rows) => {
       if (rows && rows.length > 0) {
         prompt([

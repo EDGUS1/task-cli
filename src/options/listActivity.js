@@ -16,7 +16,7 @@ function listActivities() {
 
 function listActivitiesByDay() {
   const query =
-    "SELECT a.name, a.description, (CASE WHEN ((SELECT b.completed FROM bitacora b WHERE b.activity_id = a.activity_id) IS NULL)THEN 'TODO' ELSE 'COMPLETED' END) AS estado FROM activity a WHERE a.type_priority_id = 2";
+    "SELECT a.name, a.description, (CASE WHEN ((SELECT b.completed FROM bitacora b WHERE b.active = 1 AND b.activity_id = a.activity_id) IS NULL) THEN 'TODO' ELSE 'COMPLETED' END) AS estado FROM activity a WHERE a.active = 1 AND a.type_priority_id = 2";
   print_table(query);
 }
 

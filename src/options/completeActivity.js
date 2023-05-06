@@ -2,7 +2,7 @@ const { prompt } = require('inquirer');
 const db = require('../config/db');
 
 function completeActivity() {
-  db.all('SELECT * FROM activity', (err, rows) => {
+  db.all('SELECT * FROM activity WHERE active = 1', (err, rows) => {
     prompt([
       {
         type: 'list',
@@ -13,7 +13,7 @@ function completeActivity() {
       },
     ]).then(res => {
       db.all(
-        `SELECT * FROM reference where activity_id =${
+        `SELECT * FROM reference where active = 1 AND activity_id =${
           res.id.split('-')[0]
         } and completed = 0`,
         (err, rows) => {

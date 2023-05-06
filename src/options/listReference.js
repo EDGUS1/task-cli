@@ -12,19 +12,19 @@ function print_table(query, params) {
 
 function listAllReference() {
   const query =
-    'SELECT r.description, r.url, t.name FROM reference r LEFT JOIN type_reference t ON r.type_reference_id = t.type_reference_id';
+    'SELECT r.description, r.url, t.name FROM reference r LEFT JOIN type_reference t ON r.type_reference_id = t.type_reference_id WHERE r.active = 1';
   print_table(query, []);
 }
 
 function callRefByType(type) {
   const query =
-    'SELECT url, description FROM reference WHERE type_reference_id = ?';
+    'SELECT url, description FROM reference WHERE active = 1 AND type_reference_id = ?';
   print_table(query, type);
 }
 
 function listReferenceByType() {
   db.all(
-    'SELECT type_reference_id, name FROM type_reference ORDER BY type_reference_id',
+    'SELECT type_reference_id, name FROM type_reference WHERE active = 1 ORDER BY type_reference_id',
     (err, rows) => {
       prompt([
         {
@@ -47,13 +47,13 @@ function listReferenceByType() {
 
 function callDBRefByActvity(activity_id) {
   const query =
-    'SELECT r.url, r.description, t.name FROM reference r INNER JOIN reference_activity a ON r.reference_id = a.reference_id INNER JOIN type_reference t ON t.type_reference_id = r.type_reference_id  WHERE a.activity_id = ?';
+    'SELECT r.url, r.description, t.name FROM reference r INNER JOIN reference_activity a ON r.reference_id = a.reference_id INNER JOIN type_reference t ON t.type_reference_id = r.type_reference_id WHERE a.active = 1 AND a.activity_id = ?';
   print_table(query, [activity_id]);
 }
 
 function listReferenceByActvity() {
   db.all(
-    'SELECT activity_id, name FROM activity ORDER BY activity_id',
+    'SELECT activity_id, name FROM activity WHERE active = 1 ORDER BY activity_id',
     (err, rows) => {
       prompt([
         {
