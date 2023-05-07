@@ -14,7 +14,7 @@ function saveReferenceActiv(reference, desc) {
                   type: 'list',
                   name: 'reference',
                   message: 'Seleccione la actividad',
-                  choices: rows_act.map(e => e.activity_id + '-' + e.name),
+                  choices: rows_act.map(e => e.activity_id + '. ' + e.name),
                   default: 0,
                 },
               ]
@@ -28,7 +28,7 @@ function saveReferenceActiv(reference, desc) {
                   type: 'list',
                   name: 'reference',
                   message: 'Seleccione la actividad',
-                  choices: rows_act.map(e => e.activity_id + '-' + e.name),
+                  choices: rows_act.map(e => e.activity_id + '. ' + e.name),
                   default: 0,
                 },
                 {
@@ -41,7 +41,7 @@ function saveReferenceActiv(reference, desc) {
                   name: 'type_ref',
                   message: 'Seleccione el tipo de referencia',
                   choices: rows_type_ref.map(
-                    e => e.type_reference_id + '-' + e.name
+                    e => e.type_reference_id + '. ' + e.name
                   ),
                   default: 0,
                 },
@@ -52,7 +52,7 @@ function saveReferenceActiv(reference, desc) {
               'INSERT INTO reference (type_reference_id, description, url) VALUES (?, ?, ?)'
             );
             stmt_reference.run(
-              res.type_ref.split('-')[0] || 1,
+              res.type_ref.split('.')[0] || 1,
               res.descripcion || null,
               res.url || reference
             );
@@ -64,7 +64,7 @@ function saveReferenceActiv(reference, desc) {
                 const stmt = db.prepare(
                   'INSERT INTO reference_activity (activity_id, reference_id) VALUES (?, ?)'
                 );
-                stmt.run(res.reference.split('-')[0], rows[0].id);
+                stmt.run(res.reference.split('.')[0], rows[0].id);
                 stmt.finalize();
               }
             );
@@ -101,7 +101,7 @@ async function saveReference(reference) {
             type: 'list',
             name: 'id',
             message: 'Seleccione el tipo de referencia',
-            choices: rows.map(e => e.type_reference_id + '-' + e.name),
+            choices: rows.map(e => e.type_reference_id + '. ' + e.name),
             default: 0,
           },
         ];
@@ -110,7 +110,7 @@ async function saveReference(reference) {
             'INSERT INTO reference (type_reference_id, description, url) VALUES (?, ?, ?)'
           );
           stmt.run(
-            res.id.split('-')[0] || 1,
+            res.id.split('.')[0] || 1,
             res.descripcion || null,
             res.url || reference
           );

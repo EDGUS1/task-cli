@@ -1,7 +1,7 @@
 const db = require('../config/db');
 
-function print_table(query) {
-  db.all(query, (err, rows) => {
+function print_table(query, params) {
+  db.all(query, params, (err, rows) => {
     if (rows && rows.length > 0) console.table(rows, Object.keys(rows[0]));
     else console.log('No hay datos guardados');
   });
@@ -10,7 +10,7 @@ function print_table(query) {
 
 function listActivities() {
   const query =
-    'SELECT a.name, a.description, t.name AS priority FROM activity a INNER JOIN type_priority t ON a.type_priority_id = t.type_priority_id';
+    'SELECT a.name, a.description, t.name AS priority FROM activity a INNER JOIN type_priority t ON a.type_priority_id = t.type_priority_id WHERE a.active = 1';
   print_table(query);
 }
 
@@ -20,4 +20,9 @@ function listActivitiesByDay() {
   print_table(query);
 }
 
-module.exports = { listActivities, listActivitiesByDay };
+function getActivityById(id) {
+  const query = 'SELECT * FROM activity WHERE activity_id = ?';
+  print_table(query, [id]);
+}
+
+module.exports = { listActivities, listActivitiesByDay, getActivityById };

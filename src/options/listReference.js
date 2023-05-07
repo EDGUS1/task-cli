@@ -31,12 +31,12 @@ function listReferenceByType() {
           type: 'list',
           name: 'id',
           message: 'Seleccione el tipo de referencia',
-          choices: rows.map(e => e.type_reference_id + '-' + e.name),
+          choices: rows.map(e => e.type_reference_id + '. ' + e.name),
           default: 0,
         },
       ])
         .then(response => {
-          callRefByType(response.id.split('-')[0]);
+          callRefByType(response.id.split('.')[0]);
         })
         .catch(error => {
           console.error(error);
@@ -60,12 +60,12 @@ function listReferenceByActvity() {
           type: 'list',
           name: 'id',
           message: 'Seleccione la actividad',
-          choices: rows.map(e => e.activity_id + '-' + e.name),
+          choices: rows.map(e => e.activity_id + '. ' + e.name),
           default: 0,
         },
       ])
         .then(response => {
-          callDBRefByActvity(response.id.split('-')[0]);
+          callDBRefByActvity(response.id.split('.')[0]);
         })
         .catch(error => {
           console.error(error);

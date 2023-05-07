@@ -11,7 +11,7 @@ function completeActvDaily() {
             type: 'checkbox',
             name: 'complete',
             message: 'Seleccione la(s) actividad(es)',
-            choices: rows.map(e => e.activity_id + '-' + e.name),
+            choices: rows.map(e => e.activity_id + '. ' + e.name),
             default: 0,
           },
         ]).then(select => {
@@ -20,7 +20,7 @@ function completeActvDaily() {
               "INSERT into bitacora (activity_id, completed, completed_at) VALUES (?,1,datetime('now','localtime'))"
             );
             select.complete.forEach(element => {
-              stmt.run(element.split('-')[0]);
+              stmt.run(element.split('.')[0]);
             });
             stmt.finalize();
           }
