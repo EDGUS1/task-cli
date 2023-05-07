@@ -17,7 +17,7 @@ const {
 } = require('./options/listReference');
 
 const { configdb } = require('./commands/config');
-const { menu } = require('./commands/interface');
+const { menu } = require('./commands/menu');
 
 program
   .name('Task Cli')
@@ -38,8 +38,7 @@ program
   .action(options => {
     if (options.listAll) listActivities();
     else if (options.listDaily) listActivitiesByDay();
-    else if (options.add)
-      saveReferenceActiv(options.add, options.add === true ? false : true);
+    else if (options.add) saveReferenceActiv(options.add, options.add === true);
     else if (options.save) addActivity();
     else if (options.update) completeActvDaily();
   });

@@ -6,7 +6,11 @@ const {
   listActivitiesByDay,
 } = require('../options/listActivity');
 const { completeActivity } = require('../options/completeActivity');
-const { manageActivity } = require('../options/manageActivity');
+const {
+  manageActivity,
+  updateActivity,
+  deleteActivity,
+} = require('../options/manageActivity');
 const { saveReference } = require('../options/saveReference');
 
 const menu = async () => {
@@ -20,7 +24,9 @@ const menu = async () => {
       'Listar todas las actvidades',
       'Gestionar actividades',
       'Agregar referencia(url)',
-      'Marcar activivdad completada',
+      'Marcar actividad completada',
+      'Actualizar actividad',
+      'Eliminar actividad',
       'Salir',
     ],
   })
@@ -35,8 +41,12 @@ const menu = async () => {
         manageActivity();
       } else if (ans.opcion == 'Agregar referencia(url)') {
         saveReference(null, false);
-      } else if (ans.opcion == 'Marcar activivdad completada') {
+      } else if (ans.opcion == 'Marcar actividad completada') {
         completeActivity();
+      } else if (ans.opcion == 'Actualizar actividad') {
+        updateActivity();
+      } else if (ans.opcion == 'Eliminar actividad') {
+        deleteActivity();
       }
     })
     .catch(error => {
