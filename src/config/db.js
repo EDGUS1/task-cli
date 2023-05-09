@@ -1,8 +1,5 @@
-const sqlite3 = require('sqlite3').verbose();
+const create_db = require('./create_db');
 
-const db = new sqlite3.Database('./mock.db', sqlite3.OPEN_READWRITE, err => {
-  if (err) return console.error(err.message);
-  // console.log('connected');
-});
+const db = create_db('mock.db');
 
-module.exports = db;
+module.exports = { db };
