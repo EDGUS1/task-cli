@@ -82,6 +82,16 @@ function deleteReference(database, id) {
   });
 }
 
+function getLastIdReference(database) {
+  return new Promise((resolve, reject) => {
+    const sql = `SELECT MAX(reference_id) as id FROM reference`;
+    return database.get(sql, function (err, res) {
+      if (err) return reject(err.message);
+      return resolve(res);
+    });
+  });
+}
+
 module.exports = {
   getAllReferences,
   getAllActiveReferences,
@@ -91,4 +101,5 @@ module.exports = {
   updateReference,
   deleteReference,
   getReferenceById,
+  getLastIdReference,
 };
