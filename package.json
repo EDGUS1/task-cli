@@ -10,7 +10,9 @@
     "start": "node src/command.js menu",
     "prepare": "rm -rf mock.db && touch mock.db && node src/command.js config",
     "db": "sqlite3 mock.db",
-    "test": "jest"
+    "test": "jest",
+    "prepare:test": "rm -rf test.db && touch test.db",
+    "db:test": "sqlite3 test.db"
   },
   "keywords": [],
   "author": "",
