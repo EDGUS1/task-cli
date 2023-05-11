@@ -1,5 +1,6 @@
+const sqlite3 = require('sqlite3').verbose();
+
 const { configdb } = require('../commands/config');
-const create_db = require('../config/create_db');
 const {
   getAllReferences,
   insertReference,
@@ -12,11 +13,12 @@ const {
 } = require('../options/database/reference');
 
 describe('Table reference', () => {
-  const db_test = create_db('reference.db');
+  const db_test = new sqlite3.Database(':memory:');
+
   beforeAll(async () => {
     const response = await configdb(db_test);
     expect(response).toBe('Objetos creados correctamente');
-  }, 5000 * 4);
+  });
 
   test('Select all references after create tables', async () => {
     return getAllReferences(db_test).then(data => {

@@ -1,5 +1,6 @@
+const sqlite3 = require('sqlite3').verbose();
 const { configdb } = require('../commands/config');
-const create_db = require('../config/create_db');
+
 const {
   getAllActivities,
   getActivityById,
@@ -11,11 +12,12 @@ const {
 } = require('../options/database/activity');
 
 describe('Table activity', () => {
-  const db_test = create_db('activity.db');
+  const db_test = new sqlite3.Database(':memory:');
+
   beforeAll(async () => {
     const response = await configdb(db_test);
     expect(response).toBe('Objetos creados correctamente');
-  }, 5000 * 4);
+  });
 
   test('Select all activities after create tables', async () => {
     const data = await getAllActivities(db_test);
@@ -34,6 +36,7 @@ describe('Table activity', () => {
     expect(data.name).toBe(name);
     expect(data.description).toBe(description);
     expect(data.type_priority_id).toBe(type);
+    expect(data.updated_at).toBeNull();
   });
 
   test('Select all activities after insert a new one', async () => {
@@ -52,6 +55,7 @@ describe('Table activity', () => {
     expect(data.name).toBe(name);
     expect(data.description).toBe(description);
     expect(data.type_priority_id).toBe(type);
+    expect(data.updated_at).not.toBeNull();
   });
 
   test('Delete activity', async () => {

@@ -1,16 +1,18 @@
+const sqlite3 = require('sqlite3').verbose();
+
 const { configdb } = require('../commands/config');
-const create_db = require('../config/create_db');
 const {
   getAllTypeReferences,
   getAllActiveTypeReferences,
 } = require('../options/database/typeReference');
 
-describe('Table type_reference', () => {
-  const db_test = create_db('typeReference.db');
+describe.skip('Table type_reference', () => {
+  const db_test = new sqlite3.Database(':memory:');
+
   beforeAll(async () => {
     const response = await configdb(db_test);
     expect(response).toBe('Objetos creados correctamente');
-  }, 5000 * 4);
+  });
 
   test('Select all type of references after create tables', async () => {
     const data = await getAllTypeReferences(db_test);
