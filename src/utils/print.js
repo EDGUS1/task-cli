@@ -4,7 +4,7 @@ const COLOR_ = 3;
 const BACKGROUND = 4;
 
 const custom_print = (msg, opt, color) => {
-  process.stdout.write(`\x1b[${opt}8;5;${color}m ${msg} \x1b[m`);
+  console.log(`\x1b[${opt}8;5;${color}m ${msg} \x1b[m`);
 };
 
 const log = msg => {
