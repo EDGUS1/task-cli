@@ -1,36 +1,32 @@
 const { prompt } = require('inquirer');
-const db = require('../config/db');
+const { log_warn } = require('../utils/print');
+const { insertBitacora } = require('./database/bitacora');
+const {
+  getAllActiveIncompleteDailyActivities,
+} = require('./database/activity');
 
-function completeActvDaily() {
-  db.all(
-    'SELECT activity_id, name FROM activity WHERE active = 1 AND type_priority_id = 2 and activity_id NOT IN (SELECT activity_id FROM bitacora)',
-    (err, rows) => {
-      if (rows && rows.length > 0) {
-        prompt([
-          {
-            type: 'checkbox',
-            name: 'complete',
-            message: 'Seleccione la(s) actividad(es)',
-            choices: rows.map(e => e.activity_id + '. ' + e.name),
-            default: 0,
-          },
-        ]).then(select => {
-          if (select.complete?.length > 0) {
-            const stmt = db.prepare(
-              "INSERT into bitacora (activity_id, completed, completed_at) VALUES (?,1,datetime('now','localtime'))"
-            );
-            select.complete.forEach(element => {
-              stmt.run(element.split('.')[0]);
-            });
-            stmt.finalize();
-          }
+async function completeActvDaily(database) {
+  const data = await getAllActiveIncompleteDailyActivities(database);
+
+  if (data && data.length > 0) {
+    prompt([
+      {
+        type: 'checkbox',
+        name: 'complete',
+        message: 'Seleccione la(s) actividad(es)',
+        choices: data.map(e => e.activity_id + '. ' + e.name),
+        default: 0,
+      },
+    ]).then(async select => {
+      if (select.complete?.length > 0) {
+        select.complete.forEach(async element => {
+          await insertBitacora(database, element.split('.')[0]);
         });
-      } else {
-        console.log('Todas las actividades han sido completadas');
       }
-    }
-  );
-  db.close();
+    });
+  } else {
+    log_warn('Todas las actividades han sido completadas');
+  }
 }
 
 module.exports = { completeActvDaily };
