@@ -18,6 +18,8 @@ const {
 
 const { configdb } = require('./commands/config');
 const { menu } = require('./commands/menu');
+const { db } = require('./config/db');
+const { log_info } = require('./utils/print');
 
 program
   .name('Task Cli')
@@ -36,11 +38,12 @@ program
   .option('-s, --save', 'Agregar actividad')
   .option('-u, --update', 'Marcar como completado la actividad diaria')
   .action(options => {
-    if (options.listAll) listActivities();
-    else if (options.listDaily) listActivitiesByDay();
-    else if (options.add) saveReferenceActiv(options.add, options.add === true);
-    else if (options.save) addActivity();
-    else if (options.update) completeActvDaily();
+    if (options.listAll) listActivities(db);
+    else if (options.listDaily) listActivitiesByDay(db);
+    else if (options.add)
+      saveReferenceActiv(db, options.add, options.add !== true);
+    else if (options.save) addActivity(db);
+    else if (options.update) completeActvDaily(db);
   });
 
 program
@@ -51,20 +54,20 @@ program
   .option('-la, --list-ref-act', 'Listar referencias por actividad')
   .option('-lt, --list-ref-type', 'Listar referencias por tipo')
   .action(options => {
-    if (options.add) saveReference(options.add);
-    else if (options.listRef) listAllReference();
-    else if (options.listRefAct) listReferenceByActvity();
-    else if (options.listRefType) listReferenceByType(2);
+    if (options.add) saveReference(db, options.add);
+    else if (options.listRef) listAllReference(db);
+    else if (options.listRefAct) listReferenceByActvity(db);
+    else if (options.listRefType) listReferenceByType(db);
   });
 
 program
   .command('config')
   .description('Se configura la base de datos')
-  .action(configdb);
+  .action(() => configdb(db).then(res => log_info(res)));
 
 program
   .command('menu')
   .description('Se muestra toas las opciones disponibles')
-  .action(menu);
+  .action(() => menu(db));
 
 program.parse(process.argv);

@@ -1,5 +1,5 @@
-const create_db = require('./create_db');
+const createDB = require('./createDB');
 
-const db = create_db('mock.db');
+const db = createDB('mock.db');
 
 module.exports = { db };
