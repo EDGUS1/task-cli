@@ -1,41 +1,43 @@
-const { prompt } = require('inquirer');
-const db = require('../config/db');
+const inquirer = require('inquirer');
 
-async function addActivity() {
-  await prompt([
+const { insertActivity } = require('./database/activity');
+const { log_error } = require('../utils/print');
+
+function addActivity(database) {
+  const options = [
     {
       type: 'input',
-      name: 'nombre',
+      name: 'name',
       message: 'Nombre de la actividad',
     },
     {
       type: 'input',
-      name: 'desc',
+      name: 'description',
       message: 'Descripción de la actividad',
     },
     {
       type: 'list',
-      name: 'prioridad',
+      name: 'priority',
       message: 'Prioridad de la actividad',
       choices: ['Default', 'Diario'],
       default: 0,
     },
-  ])
-    .then(response => {
-      const stmt = db.prepare(
-        'INSERT INTO activity (name, description, type_priority_id) VALUES (?,?,?)'
+  ];
+  return inquirer
+    .prompt(options)
+    .then(async response => {
+      const priority = response.priority == 'Default' ? 1 : 2;
+      await insertActivity(
+        database,
+        response.name,
+        response.description,
+        priority
       );
-      stmt.run(
-        response.nombre,
-        response.desc,
-        response.prioridad == 'Default' ? 1 : 2
-      );
-      stmt.finalize();
-      db.close();
+      return response;
     })
-    .catch(error => {
-      console.error('Guardar nueva actividad');
-      console.error(error);
+    .catch(err => {
+      log_error(err.message);
+      return err;
     });
 }
 

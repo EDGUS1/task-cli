@@ -1,77 +1,67 @@
-const { prompt } = require('inquirer');
+const inquirer = require('inquirer');
 
-const db = require('../config/db');
+const { log_error, print_table } = require('../utils/print');
+const {
+  getAllActiveReferences,
+  getAllActiveReferencesByType,
+  getAllActiveReferencesByActivity,
+} = require('./database/reference');
+const { getAllActiveActivities } = require('./database/activity');
+const { getAllActiveTypeReferences } = require('./database/typeReference');
 
-function print_table(query, params) {
-  db.all(query, params, (err, rows) => {
-    if (rows && rows.length > 0) console.table(rows, Object.keys(rows[0]));
-    else console.log('No hay datos guardados');
-  });
-  db.close();
+async function listAllReference(database) {
+  const data = await getAllActiveReferences(database);
+  print_table(data);
+  return data;
 }
 
-function listAllReference() {
-  const query =
-    'SELECT r.description, r.url, t.name FROM reference r LEFT JOIN type_reference t ON r.type_reference_id = t.type_reference_id WHERE r.active = 1';
-  print_table(query, []);
+async function listReferenceByType(database) {
+  const type_ref = await getAllActiveTypeReferences(database);
+
+  return inquirer
+    .prompt([
+      {
+        type: 'list',
+        name: 'id',
+        message: 'Seleccione el tipo de referencia',
+        choices: type_ref.map(t => t.type_reference_id + '. ' + t.name),
+        default: 0,
+      },
+    ])
+    .then(async response => {
+      const id = response.id.split('.')[0];
+      const data = await getAllActiveReferencesByType(database, id);
+      print_table(data);
+      return data;
+    })
+    .catch(error => {
+      log_error(error.message);
+      return error;
+    });
 }
 
-function callRefByType(type) {
-  const query =
-    'SELECT url, description FROM reference WHERE active = 1 AND type_reference_id = ?';
-  print_table(query, type);
-}
-
-function listReferenceByType() {
-  db.all(
-    'SELECT type_reference_id, name FROM type_reference WHERE active = 1 ORDER BY type_reference_id',
-    (err, rows) => {
-      prompt([
-        {
-          type: 'list',
-          name: 'id',
-          message: 'Seleccione el tipo de referencia',
-          choices: rows.map(e => e.type_reference_id + '. ' + e.name),
-          default: 0,
-        },
-      ])
-        .then(response => {
-          callRefByType(response.id.split('.')[0]);
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    }
-  );
-}
-
-function callDBRefByActvity(activity_id) {
-  const query =
-    'SELECT r.url, r.description, t.name FROM reference r INNER JOIN reference_activity a ON r.reference_id = a.reference_id INNER JOIN type_reference t ON t.type_reference_id = r.type_reference_id WHERE a.active = 1 AND a.activity_id = ?';
-  print_table(query, [activity_id]);
-}
-
-function listReferenceByActvity() {
-  db.all(
-    'SELECT activity_id, name FROM activity WHERE active = 1 ORDER BY activity_id',
-    (err, rows) => {
-      prompt([
-        {
-          type: 'list',
-          name: 'id',
-          message: 'Seleccione la actividad',
-          choices: rows.map(e => e.activity_id + '. ' + e.name),
-          default: 0,
-        },
-      ])
-        .then(response => {
-          callDBRefByActvity(response.id.split('.')[0]);
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    }
-  );
+async function listReferenceByActvity(database) {
+  const data_activity = await getAllActiveActivities(database);
+  return inquirer
+    .prompt([
+      {
+        type: 'list',
+        name: 'id',
+        message: 'Seleccione la actividad',
+        choices: data_activity.map(d => d.activity_id + '. ' + d.name),
+        default: 0,
+      },
+    ])
+    .then(async res => {
+      const id = res.id.split('.')[0];
+      const data = await getAllActiveReferencesByActivity(database, id);
+      print_table(data);
+      return data;
+    })
+    .catch(error => {
+      log_error(error.message);
+      return error;
+    });
 }
 
 module.exports = {
