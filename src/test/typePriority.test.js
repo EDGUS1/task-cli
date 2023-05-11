@@ -2,11 +2,11 @@ const sqlite3 = require('sqlite3').verbose();
 
 const { configdb } = require('../commands/config');
 const {
-  getAllTypeReferences,
-  getAllActiveTypeReferences,
-} = require('../options/database/typeReference');
+  getAllTypePriority,
+  getAllActiveTypePriority,
+} = require('../options/database/typePriority');
 
-describe('Table type_reference', () => {
+describe('Table type_priority', () => {
   const db_test = new sqlite3.Database(':memory:');
 
   beforeAll(async () => {
@@ -14,16 +14,16 @@ describe('Table type_reference', () => {
     expect(response).toBe('Objetos creados correctamente');
   });
 
-  test('Select all type of references after create tables', async () => {
-    const data = await getAllTypeReferences(db_test);
+  test('Select all type of priority after create tables', async () => {
+    const data = await getAllTypePriority(db_test);
     // En el script inicial se insertan por defecto
-    expect(data.length).toBe(4);
+    expect(data.length).toBe(2);
   });
 
-  test('Select all active type of references', async () => {
-    const data = await getAllActiveTypeReferences(db_test);
+  test('Select all active type of priority', async () => {
+    const data = await getAllActiveTypePriority(db_test);
     // En el script inicial se insertan por defecto
-    expect(data.length).toBe(4);
+    expect(data.length).toBe(2);
   });
 
   afterAll(() => {
