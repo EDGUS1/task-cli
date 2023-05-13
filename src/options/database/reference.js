@@ -21,7 +21,7 @@ function getReferenceById(database, id) {
 function getAllActiveReferences(database) {
   return new Promise((resolve, reject) => {
     const sql =
-      'SELECT r.description, r.url, t.name FROM reference r LEFT JOIN type_reference t ON r.type_reference_id = t.type_reference_id WHERE r.active = 1';
+      'SELECT r.reference_id, r.description, r.url, t.name FROM reference r LEFT JOIN type_reference t ON r.type_reference_id = t.type_reference_id WHERE r.active = 1';
     return database.all(sql, function (err, res) {
       if (err) return reject(err.message);
       return resolve(res);
@@ -92,6 +92,16 @@ function getLastIdReference(database) {
   });
 }
 
+function markReferenceAsComplete(database, id) {
+  return new Promise((resolve, reject) => {
+    const sql = `UPDATE reference SET completed = 1, completed_at = datetime('now','localtime') WHERE reference_id = ?`;
+    database.run(sql, [id], function (err) {
+      if (err) reject(err.message);
+      resolve(this.changes);
+    });
+  });
+}
+
 module.exports = {
   getAllReferences,
   getAllActiveReferences,
@@ -102,4 +112,5 @@ module.exports = {
   deleteReference,
   getReferenceById,
   getLastIdReference,
+  markReferenceAsComplete,
 };
