@@ -19,4 +19,19 @@ function insertActivityReference(database, activity_id, reference_id) {
   });
 }
 
-module.exports = { getAllReferencesActivity, insertActivityReference };
+function getAllActiveIncompleteReferencesByActivity(database, id) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      'SELECT r.reference_id, r.url FROM reference_activity ra LEFT JOIN reference r ON r.reference_id = ra.reference_id WHERE r.active = 1 AND r.completed = 0 AND ra.activity_id = ?';
+    return database.all(sql, [id], function (err, res) {
+      if (err) return reject(err.message);
+      return resolve(res);
+    });
+  });
+}
+
+module.exports = {
+  getAllReferencesActivity,
+  insertActivityReference,
+  getAllActiveIncompleteReferencesByActivity,
+};
