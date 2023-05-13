@@ -5,11 +5,13 @@ const {
   listActivities,
   listActivitiesByDay,
 } = require('../options/listActivity');
-const { completeActivity } = require('../options/completeActivity');
 const {
   updateActivityPrompt,
   deleteActivityPrompt,
 } = require('../options/manageActivity');
+const {
+  markAsCompleteReferenceByActivity,
+} = require('../options/completeReference');
 const { saveReference } = require('../options/saveReference');
 
 const { log_error } = require('../utils/print');
@@ -32,17 +34,15 @@ const menu = async database => {
   })
     .then(ans => {
       if (ans.opcion == 'Agregar actividad') {
-        addActivity();
+        addActivity(database);
       } else if (ans.opcion == 'Listar todas las actvidades') {
-        listActivities();
+        listActivities(database);
       } else if (ans.opcion == 'Listar actvividades diarias') {
-        listActivitiesByDay();
-      } else if (ans.opcion == 'Gestionar actividades') {
-        manageActivity();
-      } else if (ans.opcion == 'Agregar referencia(url)') {
-        saveReference(null, false);
-      } else if (ans.opcion == 'Marcar actividad completada') {
-        completeActivity();
+        listActivitiesByDay(database);
+      } else if (ans.opcion == 'Agregar referencia (url)') {
+        saveReference(database, false);
+      } else if (ans.opcion == 'Marcar referencia completada') {
+        markAsCompleteReferenceByActivity(database);
       } else if (ans.opcion == 'Actualizar actividad') {
         updateActivityPrompt(database);
       } else if (ans.opcion == 'Eliminar actividad') {
