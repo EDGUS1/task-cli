@@ -7,13 +7,14 @@ const {
 } = require('../options/listActivity');
 const { completeActivity } = require('../options/completeActivity');
 const {
-  manageActivity,
-  updateActivity,
-  deleteActivity,
+  updateActivityPrompt,
+  deleteActivityPrompt,
 } = require('../options/manageActivity');
 const { saveReference } = require('../options/saveReference');
 
-const menu = async () => {
+const { log_error } = require('../utils/print');
+
+const menu = async database => {
   await prompt({
     type: 'list',
     name: 'opcion',
@@ -22,9 +23,8 @@ const menu = async () => {
       'Listar actvividades diarias',
       'Agregar actividad',
       'Listar todas las actvidades',
-      'Gestionar actividades',
-      'Agregar referencia(url)',
-      'Marcar actividad completada',
+      'Agregar referencia (url)',
+      'Marcar referencia completada',
       'Actualizar actividad',
       'Eliminar actividad',
       'Salir',
@@ -44,15 +44,12 @@ const menu = async () => {
       } else if (ans.opcion == 'Marcar actividad completada') {
         completeActivity();
       } else if (ans.opcion == 'Actualizar actividad') {
-        updateActivity();
+        updateActivityPrompt(database);
       } else if (ans.opcion == 'Eliminar actividad') {
-        deleteActivity();
+        deleteActivityPrompt(database);
       }
     })
-    .catch(error => {
-      console.error('Menu principal');
-      console.error(error);
-    });
+    .catch(error => log_error(error.message));
 };
 
 module.exports = { menu };
