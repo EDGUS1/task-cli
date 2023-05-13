@@ -21,45 +21,47 @@ async function updateActivityPrompt(database) {
     },
   ];
 
-  prompt(options).then(async res => {
-    const id = res.actv.split('.')[0];
-    const data_activity = await getActiveActivityById(database, id);
-    const data_type = await getAllActiveTypePriority(database);
+  prompt(options)
+    .then(async res => {
+      const id = res.actv.split('.')[0];
+      const data_activity = await getActiveActivityById(database, id);
+      const data_type = await getAllActiveTypePriority(database);
 
-    const update_options = [
-      {
-        type: 'input',
-        name: 'name',
-        message: 'Ingrese nuevo nombre',
-        default: data_activity.name,
-      },
-      {
-        type: 'input',
-        name: 'description',
-        message: 'Ingrese nueva descripcion',
-        default: data_activity.description,
-      },
-      {
-        type: 'list',
-        name: 'type',
-        message: 'Seleccione el nuevo tipo',
-        choices: data_type.map(e => e.type_priority_id + '. ' + e.name),
-        default: data_activity.type_priority_id - 1,
-      },
-    ];
+      const update_options = [
+        {
+          type: 'input',
+          name: 'name',
+          message: 'Ingrese nuevo nombre',
+          default: data_activity.name,
+        },
+        {
+          type: 'input',
+          name: 'description',
+          message: 'Ingrese nueva descripcion',
+          default: data_activity.description,
+        },
+        {
+          type: 'list',
+          name: 'type',
+          message: 'Seleccione el nuevo tipo',
+          choices: data_type.map(e => e.type_priority_id + '. ' + e.name),
+          default: data_activity.type_priority_id - 1,
+        },
+      ];
 
-    prompt(update_options)
-      .then(async response => {
-        await updateActivity(
-          database,
-          response.name,
-          response.description,
-          response.type.split('.')[0],
-          id
-        );
-      })
-      .catch(err => log_error(err));
-  });
+      prompt(update_options)
+        .then(async response => {
+          await updateActivity(
+            database,
+            response.name,
+            response.description,
+            response.type.split('.')[0],
+            id
+          );
+        })
+        .catch(err => log_error(err));
+    })
+    .catch(err => log_error(err));
 }
 
 async function deleteActivityPrompt(database) {
