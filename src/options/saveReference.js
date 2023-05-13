@@ -56,7 +56,7 @@ async function saveReferenceActiv(database, reference, shortcut) {
 
       const max_id = await getLastIdReference(database);
 
-      await insertActivityReference(database, activity_id, max_id);
+      await insertActivityReference(database, activity_id, max_id.id);
     })
     .catch(error => {
       log_error(error.message);
