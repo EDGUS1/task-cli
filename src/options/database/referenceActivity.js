@@ -30,8 +30,30 @@ function getAllActiveIncompleteReferencesByActivity(database, id) {
   });
 }
 
+function getLastIdInserted(database) {
+  return new Promise((resolve, reject) => {
+    const sql = `SELECT MAX(reference_activity_id) as id FROM reference_activity`;
+    return database.get(sql, function (err, res) {
+      if (err) return reject(err.message);
+      return resolve(res);
+    });
+  });
+}
+
+function getReferenceActivityById(database, id) {
+  return new Promise((resolve, reject) => {
+    const sql = `SELECT * FROM reference_activity WHERE reference_activity_id = ?`;
+    return database.get(sql, [id], function (err, res) {
+      if (err) return reject(err.message);
+      return resolve(res);
+    });
+  });
+}
+
 module.exports = {
   getAllReferencesActivity,
   insertActivityReference,
   getAllActiveIncompleteReferencesByActivity,
+  getLastIdInserted,
+  getReferenceActivityById,
 };
