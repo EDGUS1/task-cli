@@ -10,7 +10,7 @@ function getAllReferences(database) {
 
 function getReferenceById(database, id) {
   return new Promise((resolve, reject) => {
-    let sql = `SELECT * FROM reference WHERE reference_id = ?`;
+    const sql = `SELECT * FROM reference WHERE reference_id = ?`;
     return database.get(sql, [id], function (err, res) {
       if (err) return reject(err.message);
       return resolve(res);
@@ -94,7 +94,7 @@ function getLastIdReference(database) {
 
 function markReferenceAsComplete(database, id) {
   return new Promise((resolve, reject) => {
-    const sql = `UPDATE reference SET completed = 1, completed_at = datetime('now','localtime') WHERE reference_id = ?`;
+    const sql = `UPDATE reference SET completed = 1, completed_at = datetime('now','localtime'), updated_at = datetime('now','localtime') WHERE reference_id = ?`;
     database.run(sql, [id], function (err) {
       if (err) reject(err.message);
       resolve(this.changes);
