@@ -1,8 +1,10 @@
-const { prompt } = require('inquirer');
+const inquirer = require('inquirer');
+
 const { insertReference, getLastIdReference } = require('./database/reference');
 const { getAllActiveTypeReferences } = require('./database/typeReference');
 const { getAllActiveActivities } = require('./database/activity');
 const { insertActivityReference } = require('./database/referenceActivity');
+const { log_error } = require('../utils/print');
 
 async function saveReferenceActiv(database, reference, shortcut) {
   const data_activity = await getAllActiveActivities(database);
@@ -45,7 +47,8 @@ async function saveReferenceActiv(database, reference, shortcut) {
         },
       ];
 
-  prompt(options)
+  return inquirer
+    .prompt(options)
     .then(async res => {
       const type = shortcut ? 1 : res.type_ref.split('.')[0];
       const activity_id = res.activity.split('.')[0];
@@ -57,9 +60,11 @@ async function saveReferenceActiv(database, reference, shortcut) {
       const max_id = await getLastIdReference(database);
 
       await insertActivityReference(database, activity_id, max_id.id);
+      return res;
     })
     .catch(error => {
       log_error(error.message);
+      return error;
     });
 }
 
@@ -76,7 +81,7 @@ async function saveReference(database, reference) {
       },
       {
         type: 'input',
-        name: 'descripcion',
+        name: 'description',
         message: 'Ingrese descripcion',
       },
       {
@@ -87,13 +92,16 @@ async function saveReference(database, reference) {
         default: 0,
       },
     ];
-    prompt(options)
+    return inquirer
+      .prompt(options)
       .then(async res => {
         const type = res.id.split('.')[0];
-        await insertReference(database, type, res.descripcion, res.url);
+        await insertReference(database, type, res.description, res.url);
+        return res;
       })
       .catch(error => {
         log_error(error.message);
+        return error;
       });
   }
 }

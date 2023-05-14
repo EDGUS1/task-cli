@@ -9,7 +9,7 @@ const {
 
 async function markAsCompleteReferenceByActivity(database) {
   const data = await getAllActiveActivities(database);
-  inquirer
+  return inquirer
     .prompt([
       {
         type: 'list',
@@ -21,14 +21,12 @@ async function markAsCompleteReferenceByActivity(database) {
     ])
     .then(async res => {
       const id = res.id.split('.')[0];
-      console.log(id);
       const data_reference = await getAllActiveIncompleteReferencesByActivity(
         database,
         id
       );
-      console.log(data_reference);
       if (data_reference && data_reference.length > 0)
-        inquirer
+        return inquirer
           .prompt([
             {
               type: 'checkbox',
@@ -44,10 +42,17 @@ async function markAsCompleteReferenceByActivity(database) {
                 markReferenceAsComplete(database, element.split('.')[0]);
               });
             }
+            return select;
           })
-          .catch(error => log_error(error.message));
+          .catch(error => {
+            log_error(error.message);
+            return error;
+          });
     })
-    .catch(error => log_error(error.message));
+    .catch(error => {
+      log_error(error.message);
+      return error;
+    });
 }
 
 module.exports = { markAsCompleteReferenceByActivity };

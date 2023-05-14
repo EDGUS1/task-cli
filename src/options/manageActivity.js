@@ -1,4 +1,5 @@
-const { prompt } = require('inquirer');
+const inquirer = require('inquirer');
+
 const {
   getAllActiveActivities,
   updateActivity,
@@ -21,7 +22,8 @@ async function updateActivityPrompt(database) {
     },
   ];
 
-  prompt(options)
+  return inquirer
+    .prompt(options)
     .then(async res => {
       const id = res.actv.split('.')[0];
       const data_activity = await getActiveActivityById(database, id);
@@ -49,7 +51,8 @@ async function updateActivityPrompt(database) {
         },
       ];
 
-      prompt(update_options)
+      return inquirer
+        .prompt(update_options)
         .then(async response => {
           await updateActivity(
             database,
@@ -58,10 +61,17 @@ async function updateActivityPrompt(database) {
             response.type.split('.')[0],
             id
           );
+          return response;
         })
-        .catch(err => log_error(err));
+        .catch(err => {
+          log_error(err.message);
+          return err;
+        });
     })
-    .catch(err => log_error(err));
+    .catch(err => {
+      log_error(err.message);
+      return err;
+    });
 }
 
 async function deleteActivityPrompt(database) {
@@ -83,11 +93,16 @@ async function deleteActivityPrompt(database) {
     },
   ];
 
-  prompt(options)
+  return inquirer
+    .prompt(options)
     .then(res => {
       if (res.delete) deleteActivity(database, res.actv.split('.')[0]);
+      return res;
     })
-    .catch(err => log_error(err));
+    .catch(err => {
+      log_error(err.message);
+      return err;
+    });
 }
 
 module.exports = { updateActivityPrompt, deleteActivityPrompt };

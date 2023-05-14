@@ -21,7 +21,7 @@ async function updateReferencePrompt(database) {
     },
   ];
 
-  inquirer
+  return inquirer
     .prompt(options)
     .then(async res => {
       const id = res.ref.split('.')[0];
@@ -62,7 +62,7 @@ async function updateReferencePrompt(database) {
           default: selected_ref.type_reference_id - 1,
         },
       ];
-      inquirer
+      return inquirer
         .prompt(update_options)
         .then(async response => {
           await updateReference(
@@ -72,10 +72,17 @@ async function updateReferencePrompt(database) {
             response.url,
             id
           );
+          return response;
         })
-        .catch(err => log_error(err));
+        .catch(err => {
+          log_error(err.message);
+          return err;
+        });
     })
-    .catch(err => log_error(err));
+    .catch(err => {
+      log_error(err.message);
+      return err;
+    });
 }
 
 async function deleteReferencePrompt(database) {
@@ -97,12 +104,16 @@ async function deleteReferencePrompt(database) {
     },
   ];
 
-  inquirer
+  return inquirer
     .prompt(options)
     .then(res => {
       if (res.delete) deleteReference(database, res.ref.split('.')[0]);
+      return res;
     })
-    .catch(err => log_error(err));
+    .catch(err => {
+      log_error(err.message);
+      return err;
+    });
 }
 
 module.exports = { updateReferencePrompt, deleteReferencePrompt };
