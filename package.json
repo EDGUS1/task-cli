@@ -1,6 +1,6 @@
 {
   "name": "task-cli",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "bin": {
@@ -12,7 +12,8 @@
     "db": "sqlite3 mock.db",
     "test": "jest",
     "prepare:test": "rm -rf test.db && touch test.db",
-    "db:test": "sqlite3 test.db"
+    "db:test": "sqlite3 test.db",
+    "release": "standard-version"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +24,7 @@
     "sqlite3": "^5.1.6"
   },
   "devDependencies": {
-    "jest": "^29.5.0"
+    "jest": "^29.5.0",
+    "standard-version": "^9.5.0"
   }
 }

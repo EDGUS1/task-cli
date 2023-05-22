@@ -1,0 +1,65 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## 1.1.0 (2023-05-22)
+
+
+### Features
+
+* Add 4 commands ([4202dfe](https://github.com/EDGUS1/task-cli/commit/4202dfe22e0d71664c0ef54c9bce15b921fefea6))
+* Add active flag to each table ([74f69ed](https://github.com/EDGUS1/task-cli/commit/74f69ed31cd63acb6eaff5695891c63ff0de8bad))
+* Add db call for select incomplete state in reference ([199f937](https://github.com/EDGUS1/task-cli/commit/199f937a588b3f55d1787453f7d39ec7163cda36))
+* Add new options ([46ce142](https://github.com/EDGUS1/task-cli/commit/46ce1427c9090413a01541e1049b74af72b2f7e6))
+* Add param to create_db ([796a64b](https://github.com/EDGUS1/task-cli/commit/796a64b321de16275753c0ea3ae7264b597fa147))
+* Add update_at in complete reference query ([f8cf34a](https://github.com/EDGUS1/task-cli/commit/f8cf34a0ce6ba76fff11e8bb845a8817b2bd35ea))
+* Change activity insert query ([5234114](https://github.com/EDGUS1/task-cli/commit/523411466d60d7c58c76a239ca7d5dddef34f9d4))
+* Change function name to completeActvDaily ([ea32fd5](https://github.com/EDGUS1/task-cli/commit/ea32fd52d54462f5e6a190752245119e6ba5e746))
+* Change implementation to promise ([5a0d0d9](https://github.com/EDGUS1/task-cli/commit/5a0d0d9bbe4f66012ab070437f439e0f49e8e073))
+* Change messages and update imports ([1d271d3](https://github.com/EDGUS1/task-cli/commit/1d271d31d712dedc38cb1ad1b25a5dd61f87417c))
+* Change parameters in select query ([9dad92c](https://github.com/EDGUS1/task-cli/commit/9dad92cfb58957b16a7acc96125dbb85cb13311c))
+* Change update and delete prompt names ([07e97ea](https://github.com/EDGUS1/task-cli/commit/07e97ea2864ba6a7aea07059c606f9b8689cb120))
+* Config database ([0b701d4](https://github.com/EDGUS1/task-cli/commit/0b701d46950431442c583d2d150e851bdbcf013b))
+* Configure database ([973114c](https://github.com/EDGUS1/task-cli/commit/973114cd704c74497d593284d5eb9e038c38b41f))
+* Console print with color ([9d44eae](https://github.com/EDGUS1/task-cli/commit/9d44eae4d528cb262cd4c09ca3f1f4c778ba53f4))
+* Create file for each command ([5b5bc99](https://github.com/EDGUS1/task-cli/commit/5b5bc9938f438b8be45a1f4e7a4534c4169bd729))
+* Create file for each option in commands ([74bf70f](https://github.com/EDGUS1/task-cli/commit/74bf70fe2f0bd9c423982b758edc3b8ce333f166))
+* Create getLastIdReference function ([b000cea](https://github.com/EDGUS1/task-cli/commit/b000ceafcd2f15dcc05e656a6f709708e130d8c2))
+* Create new functions to get activities ([1498c76](https://github.com/EDGUS1/task-cli/commit/1498c767d673fb8c1062a84aaa04f8e74aff603d))
+* Create prepare command ([a95cbc6](https://github.com/EDGUS1/task-cli/commit/a95cbc6b85e1eb72e7b50d815286d6b7a447ac39))
+* Extract print_table function ([bcd6abe](https://github.com/EDGUS1/task-cli/commit/bcd6abe5eb6fb8d286ec5e2bebc59ead8c513e3e))
+* Implement bitacora db calls ([3e5dedd](https://github.com/EDGUS1/task-cli/commit/3e5dedd5987114e5c44de662b35658d48ab32d0d))
+* Implement database calls for activity table ([6d9eb6d](https://github.com/EDGUS1/task-cli/commit/6d9eb6d29561e46b9979bf8d3ed341d6ba7b6ce6))
+* Implement database calls for reference table ([1991a43](https://github.com/EDGUS1/task-cli/commit/1991a43de58179e9752ca4ba1a0c4c58c5a48a14))
+* Implement database calls for type_reference table ([dafc63c](https://github.com/EDGUS1/task-cli/commit/dafc63c403347ea85d823a745e1b2aa9e820e563))
+* Implement db calls and wait to promise resolve ([9a894d4](https://github.com/EDGUS1/task-cli/commit/9a894d490e251e8608c4b90b2daf9f6ed3856252))
+* Implement functions to print references ([86fba99](https://github.com/EDGUS1/task-cli/commit/86fba992c936073d54e231cc0ead74b361d31257))
+* Implement getLastIdInserted function ([8a4c64e](https://github.com/EDGUS1/task-cli/commit/8a4c64e1a20bc73d72f1730624da98c83c353756))
+* Implement reference_activity db calls ([fc45e72](https://github.com/EDGUS1/task-cli/commit/fc45e72fe38d88ad0891c30c4c972ac48abf2cf8))
+* Implement type_priority db calls ([ecd87cc](https://github.com/EDGUS1/task-cli/commit/ecd87cc21ea8b47256f4b3bea3fa275625441fed))
+* Implement update and delete activity ([e5f2d4b](https://github.com/EDGUS1/task-cli/commit/e5f2d4bd36a7cbc9d07e66510a1a28909f1e2a86))
+* Implement update and delete prompt options ([7f20178](https://github.com/EDGUS1/task-cli/commit/7f20178a86c7e9318373c43d2dffd47a8384fcfd))
+* Implemnt method to change reference state to completed ([cdb128f](https://github.com/EDGUS1/task-cli/commit/cdb128ff388fc1157cfdef91fbc2e8f63896d4ad))
+* Initial config ([d509fbf](https://github.com/EDGUS1/task-cli/commit/d509fbf6a24fa75adb2f97446d9b6995aaca8d9c))
+* Move databse config ([28cb7a0](https://github.com/EDGUS1/task-cli/commit/28cb7a080a8edf35fbb28b167883e069998c5653))
+* Options to display in console ([8ce8029](https://github.com/EDGUS1/task-cli/commit/8ce8029b670148247746c5b26bdb9974cdbdceaa))
+* Prepare test environment with jest ([dd584aa](https://github.com/EDGUS1/task-cli/commit/dd584aaf277dbcb7802d625551f644cda75295cb))
+* Refactor db calls ([b059e4a](https://github.com/EDGUS1/task-cli/commit/b059e4a22a9a888f2334d5b6aedb99bdbae91723))
+* Refactor db calls and add 'prompt' to function name ([81e13e5](https://github.com/EDGUS1/task-cli/commit/81e13e56e7a3bb1b861a1fcd2b75c821cd864c2e))
+* Refactor db calls and prepare function to test ([0a252ca](https://github.com/EDGUS1/task-cli/commit/0a252cab38e3e3e801e3b6a7367be4a60b08732c))
+* Refactor funcitons and imports ([f80576c](https://github.com/EDGUS1/task-cli/commit/f80576c0f240fab9ba3ace06aa55bd0a6a36d847))
+* Rename file ([0cd9953](https://github.com/EDGUS1/task-cli/commit/0cd9953754dad24a9dc8ab49be499498be688fe7))
+* Rename file interface.js to menu.js ([086e7aa](https://github.com/EDGUS1/task-cli/commit/086e7aa4195003fb209b0b0c2135301478a67274))
+* Replace <-> with <.> in prompt options ([2bd6c8d](https://github.com/EDGUS1/task-cli/commit/2bd6c8d667028e18a767cbfdbd8a8aed3f1b3170))
+* Send database instance to each function ([fad8930](https://github.com/EDGUS1/task-cli/commit/fad89305e745148b3148f5ca1605f5049548858c))
+* Update db param and Implement complete reference function ([6a3775c](https://github.com/EDGUS1/task-cli/commit/6a3775c834abdb8e6ed1b493b43ca2210b805eb7))
+* Update dependencies ([b68c90b](https://github.com/EDGUS1/task-cli/commit/b68c90b0d47b1f02b2b89035978b45d4cb322e1b))
+* Update dependencies ([13113c8](https://github.com/EDGUS1/task-cli/commit/13113c81dc62faefd772bd4dd64572524dc9c913))
+* Update table name in update query ([34694b1](https://github.com/EDGUS1/task-cli/commit/34694b19f58fca85c59f89901645e0f96fc11bf5))
+
+
+### Bug Fixes
+
+* Access to id value ([aa748ca](https://github.com/EDGUS1/task-cli/commit/aa748ca0c3971e14e933a7f3dc24cc805a963ef0))
+* Conflict between options and commands ([ea0da8a](https://github.com/EDGUS1/task-cli/commit/ea0da8a06465bb1ef5218b985097cf7080309167))
+* Execute insert from in sql script ([f79a92e](https://github.com/EDGUS1/task-cli/commit/f79a92e0e550dddf8f7e20745ca5017c4f184b55))
