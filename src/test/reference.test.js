@@ -10,6 +10,8 @@ const {
   getAllActiveReferences,
   getAllActiveReferencesByType,
   getAllActiveReferencesByActivity,
+  getLastIdReference,
+  markReferenceAsComplete,
 } = require('../options/database/reference');
 
 describe('Table reference', () => {
@@ -90,6 +92,38 @@ describe('Table reference', () => {
   test('Select all active references', async () => {
     return getAllActiveReferencesByActivity(db_test, 1).then(data => {
       expect(data.length).toBe(0);
+    });
+  });
+
+  test('Select last id inserted', async () => {
+    const reference = 'http://...';
+    const description = 'Test reference';
+    const type = 2;
+
+    const { id: before_id_inserted } = await getLastIdReference(db_test);
+    await insertReference(db_test, type, description, reference);
+
+    return getLastIdReference(db_test).then(data => {
+      expect(data).not.toBeNull();
+      expect(data.id).toBe(before_id_inserted + 1);
+    });
+  });
+
+  test('Select last id inserted', async () => {
+    const reference = 'http://...';
+    const description = 'Test reference';
+    const type = 2;
+
+    await insertReference(db_test, type, description, reference);
+    const { id } = await getLastIdReference(db_test);
+
+    await markReferenceAsComplete(db_test, id);
+
+    return getReferenceById(db_test, id).then(data => {
+      expect(data).not.toBeNull();
+      expect(data.completed).toBe(1);
+      expect(data.completed_at).not.toBeNull();
+      expect(data.updated_at).not.toBeNull();
     });
   });
 

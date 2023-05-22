@@ -9,6 +9,9 @@ const {
   updateActivity,
   getAllActiveActivities,
   getAllDailyActivities,
+  getActiveActivityById,
+  getLastIdInserted,
+  getAllActiveIncompleteDailyActivities,
 } = require('../options/database/activity');
 
 describe('Table activity', () => {
@@ -94,6 +97,44 @@ describe('Table activity', () => {
 
     const data = await getAllActivities(db_test);
     expect(data.length).toBe(7);
+  });
+
+  test('Select values for active activity', async () => {
+    const name = 'Test';
+    const description = 'Activity from test';
+    const type = 2;
+
+    await insertActivity(db_test, name, description, type);
+    const { id } = await getLastIdInserted(db_test);
+    const data = await getActiveActivityById(db_test, id);
+
+    expect(data).not.toBeNull();
+    expect(data.name).toBe(name);
+    expect(data.description).toBe(description);
+    expect(data.type_priority_id).toBe(type);
+  });
+
+  test('Select values for active incomplete daily activity', async () => {
+    const name = 'Test';
+    const description = 'Activity from test';
+    const type = 2;
+
+    await insertActivity(db_test, name, description, type);
+    const data = await getAllActiveIncompleteDailyActivities(db_test);
+
+    expect(data).not.toBeNull();
+  });
+
+  test('Select max_id inserted', async () => {
+    const name = 'Test';
+    const description = 'Activity from test';
+    const type = 2;
+
+    const { id: before_insert_id } = await getLastIdInserted(db_test);
+    await insertActivity(db_test, name, description, type);
+    const { id } = await getLastIdInserted(db_test);
+
+    expect(id).toBe(before_insert_id + 1);
   });
 
   afterAll(() => {
